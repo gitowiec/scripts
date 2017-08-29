@@ -12,3 +12,7 @@ locs() {
 find . -name '*.js' | xargs -L 1 -I'{}' cat {} | wc -l | tr '\n' ' ';
 echo 'locs of JavaScript code';
 }
+
+whatsize() {
+du -sh /*
+}
