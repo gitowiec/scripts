@@ -8,3 +8,18 @@ locs() {
 find . -name '*.js' | xargs -L 1 -I'{}' cat {} | wc -l | tr '\n' ' ';
 echo 'locs of JavaScript code';
 }
+
+showgroups() {
+cut -d: -f1 /etc/group
+}
+
+function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
+
+dolp() {
+    echo -e "Starting default file manager here...\n"
+    kfmclient exec .
+}
+
+npmglist() {
+    npm list -g --depth=0
+}
