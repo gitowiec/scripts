@@ -30,3 +30,11 @@ npmglist() {
 whatsize() {
     du -sh /*
 }
+
+afon() {
+    sudo uvcdynctrl -v --set='Focus, Auto' 1
+}
+
+afoff() {
+    sudo uvcdynctrl -v --set='Focus, Auto' 0
+}
