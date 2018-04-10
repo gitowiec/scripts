@@ -31,6 +31,7 @@ whatsize() {
     du -sh /*
 }
 
+#https://github.com/cshorler/webcam-tools/
 afon() {
     sudo uvcdynctrl -v --set='Focus, Auto' 1
 }
