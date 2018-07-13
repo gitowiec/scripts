@@ -18,6 +18,7 @@ showgroups() {
 }
 
 function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
+function yarn-do { (PATH=$(yarn bin):$PATH; eval $@;) }
 
 dolp() {
     echo -e "Starting default file manager here...\n"
@@ -29,4 +30,20 @@ npmglist() {
 }
 whatsize() {
     du -sh /*
+}
+
+linkedmodules(){
+	( ls -l node_modules ; ls -l node_modules/@* ) | grep ^l
+}
+
+makeLaptopSleep(){
+	sudo sh -c "echo EHC1 > /proc/acpi/wakeup;echo EHC2 > /proc/acpi/wakeup;echo XHC > /proc/acpi/wakeup"
+}
+
+ssteam() {
+	STEAM_RUNTIME_PREFER_HOST_LIBRARIES=0 steam
+}
+
+prettyPrint () {
+	python -m json.tool
 }
