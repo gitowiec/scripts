@@ -47,3 +47,13 @@ ssteam() {
 prettyPrint () {
 	python -m json.tool
 }
+
+#https://github.com/cshorler/webcam-tools/
+afon() {
+    sudo uvcdynctrl -v --set='Focus, Auto' 1
+}
+
+afoff() {
+    sudo uvcdynctrl -v --set='Focus, Auto' 0
+}
+
