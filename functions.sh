@@ -57,3 +57,6 @@ afoff() {
     sudo uvcdynctrl -v --set='Focus, Auto' 0
 }
 
+killbyport () {
+    kill -9 $(lsof -ti tcp:$1)
+}
