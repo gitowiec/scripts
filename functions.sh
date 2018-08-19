@@ -17,9 +17,9 @@ showgroups() {
     cut -d: -f1 /etc/group | sort
 }
 
-npmdo() { 
-    (PATH=$(npm bin):$PATH; eval $@;) 
-}
+
+function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
+function yarn-do { (PATH=$(yarn bin):$PATH; eval $@;) }
 
 dolp() {
     echo -e "Starting default file manager here...\n"
@@ -29,6 +29,36 @@ dolp() {
 npmglist() {
     npm list -g --depth=0
 }
+
 whatsize() {
     du -sh /*
+}
+
+linkedmodules(){
+	( ls -l node_modules ; ls -l node_modules/@* ) | grep ^l
+}
+
+makeLaptopSleep(){
+	sudo sh -c "echo EHC1 > /proc/acpi/wakeup;echo EHC2 > /proc/acpi/wakeup;echo XHC > /proc/acpi/wakeup"
+}
+
+ssteam() {
+	STEAM_RUNTIME_PREFER_HOST_LIBRARIES=0 steam
+}
+
+prettyPrint () {
+	python -m json.tool
+}
+
+#https://github.com/cshorler/webcam-tools/
+afon() {
+    sudo uvcdynctrl -v --set='Focus, Auto' 1
+}
+
+afoff() {
+    sudo uvcdynctrl -v --set='Focus, Auto' 0
+}
+
+killbyport () {
+    kill -9 $(lsof -ti tcp:$1)
 }
