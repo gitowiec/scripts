@@ -51,7 +51,7 @@ ssteam() {
 	STEAM_RUNTIME_PREFER_HOST_LIBRARIES=0 steam
 }
 
-prettyPrint () {
+prettyPrint() {
 	python -m json.tool
 }
 
@@ -64,6 +64,11 @@ afoff() {
     sudo uvcdynctrl -v --set='Focus, Auto' 0
 }
 
-killbyport () {
+killbyport() {
     kill -9 $(lsof -ti tcp:$1)
+}
+
+
+serve() {
+    pushd $@; python -m SimpleHTTPServer 8899; popd;
 }
