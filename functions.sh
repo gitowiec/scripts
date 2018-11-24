@@ -18,9 +18,13 @@ showgroups() {
     cut -d: -f1 /etc/group | sort
 }
 
+npm-do() {
+    (PATH=$(npm bin):$PATH; eval $@;)
+}
 
-function npm-do { (PATH=$(npm bin):$PATH; eval $@;) }
-function yarn-do { (PATH=$(yarn bin):$PATH; eval $@;) }
+yarn-do() {
+    (PATH=$(yarn bin):$PATH; eval $@;)
+}
 
 dolp() {
     echo -e "Starting default file manager here...\n"
@@ -47,7 +51,7 @@ ssteam() {
 	STEAM_RUNTIME_PREFER_HOST_LIBRARIES=0 steam
 }
 
-prettyPrint () {
+prettyPrint() {
 	python -m json.tool
 }
 
@@ -60,7 +64,7 @@ afoff() {
     sudo uvcdynctrl -v --set='Focus, Auto' 0
 }
 
-killbyport () {
+killbyport() {
     kill -9 $(lsof -ti tcp:$1)
 }
 
@@ -70,4 +74,8 @@ moveAllFilesToOneLetterDirs () {
 
 deleteImagesByContainerName () {
     docker ps -a | grep $1 | awk '{print $1}' | xargs docker rm
+}
+
+serve() {
+    pushd $@; python -m SimpleHTTPServer 8899; popd;
 }
