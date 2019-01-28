@@ -1,6 +1,7 @@
 #!/bin/sh
 
 lso() {
+    # -n
     ls -alG --group-directories-first "$@" | awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(" %0o ",k);print}';
 }
 
@@ -16,7 +17,6 @@ locs() {
 showgroups() {
     cut -d: -f1 /etc/group | sort
 }
-
 
 npm-do() {
     (PATH=$(npm bin):$PATH; eval $@;)
@@ -68,6 +68,13 @@ killbyport() {
     kill -9 $(lsof -ti tcp:$1)
 }
 
+moveAllFilesToOneLetterDirs () {
+    for f in *; do d="${f:0:1}"; mkdir -p "$d"; mv -t "$d" -- "$f"; done
+}
+
+deleteImagesByContainerName () {
+    docker ps -a | grep $1 | awk '{print $1}' | xargs docker rm
+}
 
 serve() {
     pushd $@; python -m SimpleHTTPServer 8899; popd;
