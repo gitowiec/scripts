@@ -79,3 +79,7 @@ deleteImagesByContainerName () {
 serve() {
     pushd $@; python -m SimpleHTTPServer 8899; popd;
 }
+
+elk() {
+    docker start elk
+}
