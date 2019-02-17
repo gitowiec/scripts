@@ -83,3 +83,7 @@ serve() {
 elk() {
     docker start elk
 }
+
+yarnpubkey() {
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+}
