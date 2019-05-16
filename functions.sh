@@ -87,3 +87,8 @@ elk() {
 yarnpubkey() {
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 }
+
+# show all ppa
+showppa() {
+    apt-cache policy | grep http | awk '{print $2 $3}' | sort -u
+}
