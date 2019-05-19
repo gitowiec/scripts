@@ -98,3 +98,12 @@ winepubkey() {
 showppa() {
     apt-cache policy | grep http | awk '{print $2 $3}' | sort -u
 }
+
+disableLineIn() {
+    pactl unload-module module-loopback
+}
+
+enableLineIn() {
+    # pacmd load-module module-loopback latency_msec=10
+    pactl load-module module-loopback latency_msec=10
+}
