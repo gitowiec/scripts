@@ -93,3 +93,8 @@ winepubkey() {
     # && sudo apt update
     #curl -sS https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
 }
+
+# show all ppa
+showppa() {
+    apt-cache policy | grep http | awk '{print $2 $3}' | sort -u
+}
