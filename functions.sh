@@ -87,3 +87,9 @@ elk() {
 yarnpubkey() {
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 }
+
+winepubkey() {
+    wget -nc https://dl.winehq.org/wine-builds/winehq.key && sudo apt-key add winehq.key
+    # && sudo apt update
+    #curl -sS https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
+}
