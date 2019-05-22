@@ -5,7 +5,7 @@ lso() {
     ls -alG --group-directories-first "$@" | awk '{k=0;for(i=0;i<=8;i++)k+=((substr($1,i+2,1)~/[rwx]/)*2^(8-i));if(k)printf(" %0o ",k);print}';
 }
 
-shutdown(){
+shutdown() {
     sudo shutdown -h now;
 }
 
@@ -39,11 +39,11 @@ whatsize() {
     du -sh /*
 }
 
-linkedmodules(){
+linkedmodules() {
 	( ls -l node_modules ; ls -l node_modules/@* ) | grep ^l
 }
 
-makeLaptopSleep(){
+makeLaptopSleep() {
 	sudo sh -c "echo EHC1 > /proc/acpi/wakeup;echo EHC2 > /proc/acpi/wakeup;echo XHC > /proc/acpi/wakeup"
 }
 
@@ -68,11 +68,11 @@ killbyport() {
     kill -9 $(lsof -ti tcp:$1)
 }
 
-moveAllFilesToOneLetterDirs () {
+moveAllFilesToOneLetterDirs() {
     for f in *; do d="${f:0:1}"; mkdir -p "$d"; mv -t "$d" -- "$f"; done
 }
 
-deleteImagesByContainerName () {
+deleteImagesByContainerName() {
     docker ps -a | grep $1 | awk '{print $1}' | xargs docker rm
 }
 
@@ -106,4 +106,8 @@ disableLineIn() {
 enableLineIn() {
     # pacmd load-module module-loopback latency_msec=10
     pactl load-module module-loopback latency_msec=10
+}
+
+mountBtrfsPool() {
+    sudo mount -t btrfs /dev/sdb2 /mnt/btrfs_pool
 }
