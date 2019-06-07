@@ -111,3 +111,14 @@ enableLineIn() {
 mountBtrfsPool() {
     sudo mount -t btrfs /dev/sdb2 /mnt/btrfs_pool
 }
+
+# https://askubuntu.com/questions/156650/apt-get-update-very-slow-stuck-at-waiting-for-headers
+aptGetCleanLists() {
+    pushd /var/lib/apt
+    sudo apt-get clean
+    sudo mv lists lists.old
+    sudo mkdir -p lists/partial
+    sudo apt-get clean
+    sudo apt-get update
+    popd
+}
