@@ -77,7 +77,13 @@ deleteImagesByContainerName() {
 }
 
 serve() {
-    pushd $@; python -m SimpleHTTPServer 8899; popd;
+    if [[ -z $2 ]]; then
+        local port=9000
+    else
+        local port=$2
+    fi
+    printf '%s %s %s %s' 'Serving contnet of' $1 'on port' $port
+    pushd $1; python -m SimpleHTTPServer $port; popd;
 }
 
 elk() {
@@ -134,4 +140,22 @@ docker-ssh() {
     # note some containers don't have bash, then try: ash (alpine), or simply sh
     # the -l at the end stands for login shell that reads profile files (read man)
     docker exec -i -t $container bash -l
+}
+
+# https://github.com/teracyhq/httpie-jwt-auth
+http-jwt(){
+    export JWT_AUTH_TOKEN=$@
+}
+
+
+showPkgDependencies(){
+    packages=($@) #openjdk-13-jre-headless default-jre-headless
+    for pkg in "${packages[@]}"; do
+        apt_cache_out="$(apt-cache --installed rdepends "$pkg" | grep -E '^ [| ]\S')"
+        if (( $? == 0 )); then
+            echo -----------------------
+            echo "$pkg"
+            echo "$apt_cache_out"
+        fi
+    done
 }
