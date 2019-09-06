@@ -83,7 +83,13 @@ deleteImagesByContainerName() {
 }
 
 serve() {
-    pushd $@; python -m SimpleHTTPServer 8899; popd;
+    if [[ -z $2 ]]; then
+        local port=9000
+    else
+        local port=$2
+    fi
+    printf '%s %s %s %s' 'Serving contnet of' $1 'on port' $port
+    pushd $1; python -m SimpleHTTPServer $port; popd;
 }
 
 elk() {
@@ -116,4 +122,46 @@ enableLineIn() {
 
 mountBtrfsPool() {
     sudo mount -t btrfs /dev/sdb2 /mnt/btrfs_pool
+}
+
+# https://askubuntu.com/questions/156650/apt-get-update-very-slow-stuck-at-waiting-for-headers
+aptGetCleanLists() {
+    pushd /var/lib/apt
+    sudo apt-get clean
+    sudo mv lists lists.old
+    sudo mkdir -p lists/partial
+    sudo apt-get clean
+    sudo apt-get update
+    popd
+}
+
+# https://askubuntu.com/a/759459/28081
+docker-ssh() {
+    container=$@
+    if [[ "$container" == "" ]]; then
+        # if no id given simply just connect to the first running container
+        container=$(docker ps | grep -Eo "^[0-9a-z]{8,}\b")
+    fi
+    # start an interactive bash inside the container
+    # note some containers don't have bash, then try: ash (alpine), or simply sh
+    # the -l at the end stands for login shell that reads profile files (read man)
+    docker exec -i -t $container bash -l
+}
+
+# https://github.com/teracyhq/httpie-jwt-auth
+http-jwt(){
+    export JWT_AUTH_TOKEN=$@
+}
+
+
+showPkgDependencies(){
+    packages=($@) #openjdk-13-jre-headless default-jre-headless
+    for pkg in "${packages[@]}"; do
+        apt_cache_out="$(apt-cache --installed rdepends "$pkg" | grep -E '^ [| ]\S')"
+        if (( $? == 0 )); then
+            echo -----------------------
+            echo "$pkg"
+            echo "$apt_cache_out"
+        fi
+    done
 }
