@@ -65,7 +65,13 @@ afoff() {
 }
 
 killbyport() {
-    kill -9 $(lsof -ti tcp:$1)
+    local pid=$(lsof -ti tcp:$1) 
+    if [[ ! -z "$pid" ]]; then
+        echo "Killing something on port ${1}, pid:${pid}"
+        kill -9 $(lsof -ti tcp:$1)
+    else
+        echo "Nothing to kill on port ${1}"
+    fi
 }
 
 moveAllFilesToOneLetterDirs() {
