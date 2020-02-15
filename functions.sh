@@ -106,6 +106,10 @@ winepubkey() {
     #curl -sS https://dl.winehq.org/wine-builds/winehq.key | sudo apt-key add -
 }
 
+chromepubkey() {
+    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+}
+
 # show all ppa
 showppa() {
     apt-cache policy | grep http | awk '{print $2 $3}' | sort -u
@@ -164,4 +168,11 @@ showPkgDependencies(){
             echo "$apt_cache_out"
         fi
     done
+}
+
+lazydocker(){
+    docker run --rm -it \
+    -v /var/run/docker.sock:/var/run/docker.sock \
+    -v /home/marek/.config/jesseduffield/lazydocker:/.config/jesseduffield/lazydocker \
+    lazyteam/lazydocker
 }
