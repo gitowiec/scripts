@@ -83,13 +83,18 @@ deleteImagesByContainerName() {
 }
 
 serve() {
+    if [[ -z $1 ]]; then
+        local dir=.
+    else
+        local dir=$1
+    fi
     if [[ -z $2 ]]; then
         local port=9000
     else
         local port=$2
     fi
-    printf '%s %s %s %s' 'Serving contnet of' $1 'on port' $port
-    pushd $1; python -m SimpleHTTPServer $port; popd;
+    printf '%s %s %s %s' 'Serving content of' $dir 'on port' $port
+    pushd $dir; python -m SimpleHTTPServer $port; popd;
 }
 
 elk() {
@@ -108,6 +113,11 @@ winepubkey() {
 
 chromepubkey() {
     wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+}
+
+
+signalpubkey() {
+    wget -O- https://updates.signal.org/desktop/apt/keys.asc | sudo apt-key add -
 }
 
 # show all ppa
@@ -153,12 +163,12 @@ docker-ssh() {
 }
 
 # https://github.com/teracyhq/httpie-jwt-auth
-http-jwt(){
+http-jwt() {
     export JWT_AUTH_TOKEN=$@
 }
 
 
-showPkgDependencies(){
+showPkgDependencies() {
     packages=($@) #openjdk-13-jre-headless default-jre-headless
     for pkg in "${packages[@]}"; do
         apt_cache_out="$(apt-cache --installed rdepends "$pkg" | grep -E '^ [| ]\S')"
@@ -170,9 +180,32 @@ showPkgDependencies(){
     done
 }
 
-lazydocker(){
+lazydocker() {
     docker run --rm -it \
     -v /var/run/docker.sock:/var/run/docker.sock \
     -v /home/marek/.config/jesseduffield/lazydocker:/.config/jesseduffield/lazydocker \
     lazyteam/lazydocker
+}
+
+updatenvm() {
+    set -e
+    cd ~/.nvm
+    git fetch --tags
+    TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
+    echo "Checking out tag $TAG..."
+    git checkout "$TAG"
+    source ~/.nvm/nvm.sh
+}
+
+
+findhere() {
+    find . -name $1 
+}
+
+ispackageinstalled() {
+    dpkg --list | grep "$1"
+}
+
+md5() {
+    echo -n $1 | md5sum | awk '{print $1}'
 }
