@@ -35,6 +35,11 @@ npmglist() {
     npm list -g --depth=0
 }
 
+
+yarnglist() {
+    yarn global list --depth=0
+}
+
 whatsize() {
     du -sh /*
 }
@@ -187,6 +192,7 @@ lazydocker() {
     lazyteam/lazydocker
 }
 
+
 updatenvm() {
     set -e
     cd ~/.nvm
@@ -208,4 +214,30 @@ ispackageinstalled() {
 
 md5() {
     echo -n $1 | md5sum | awk '{print $1}'
+}
+
+__bashrc_command_timer_start() {
+    __bashrc_command="${__bashrc_command-"${BASH_COMMAND%% *}"}"
+    __bashrc_command_start="${__bashrc_command_start-"$SECONDS"}"
+}
+trap __bashrc_command_timer_start DEBUG
+
+__bashrc_command_timer_notify() {
+    # https://gitlab.com/victor-engmark/tilde/-/blob/1fc8b9f6ab0586499c7921b1452c43c394cd1e39/.bashrc
+    # Notify if the command ran for a long time
+    if [[ "$(("$SECONDS" - "$__bashrc_command_start"))" -gt 60 ]]
+    then
+        notify-send "\`${__bashrc_command} …\` finished with exit code ${exit_code}"
+    fi
+    unset __bashrc_command __bashrc_command_start
+
+}
+
+makeSureAllTerminalsSaveHistory() {
+    # https://gitlab.com/victor-engmark/tilde/-/blob/1fc8b9f6ab0586499c7921b1452c43c394cd1e39/.bashrc
+    # Make sure all terminals save history
+    # put into PROMPT_COMMAND
+    history -a
+    history -c
+    history -r
 }
